@@ -16,7 +16,7 @@ const App = () => {
   ]
   const [selected, setSelected] = useState(getRandomInt(anecdotes.length))  // I don't always want to start with the first anecdote
   const [votes, setVoted] = useState(Array(anecdotes.length).fill(0))
-  const [maxdata, setMaxdata] = useState([])
+  const [maxdata, setMaxdata] = useState(["",""])
 
 //  const randomnumber = getRandomInt(anecdotes.length)
 //  const handleNextanecdote = () => setSelected(randomnumber)
@@ -37,12 +37,23 @@ const App = () => {
     const max = Math.max(...maxVotes)
     const maxindex = maxVotes.indexOf(max)
 
+    const toptexts = [] // expanded the assignment to show all quotes with (the same) max numbers 
+    for (let index = 0; index < newVotes.length; index++) {
+      if (newVotes[index] === max) {
+        toptexts.push(anecdotes[index]);
+      }
+    }
+    console.log(toptexts.join('\r\n'))
+
     const newVotedata = {
       ...maxdata,
     }
-    newVotedata[0] = anecdotes[maxindex]
-    newVotedata[1]  = max
+    newVotedata[0] = toptexts
+    newVotedata[1] = max
     setMaxdata(newVotedata)
+
+    ///// Maak een component die alle regels <p>Has {maxdata[1]} votes</p> toont voor alle in de index maxdata
+
   }
 
   return (
@@ -54,10 +65,9 @@ const App = () => {
       <Button text="Vote" handleClick={handleVote}/>
       <Button text="Random anecdote" handleClick={handleNextanecdote}/>
       </p>
-      <h1>Anecdote with most votes</h1>
+      <h1>Anecdote(s) with most votes</h1>
       <p>{maxdata[0]}</p>
-      <p>Has {maxdata[1]} votes</p>
-      
+      <p>Has or have {maxdata[1]} votes</p>
     </div>
   )
 }
