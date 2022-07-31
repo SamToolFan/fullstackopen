@@ -6,8 +6,9 @@ const Courses = ({ courses }) =>
 const Header = ({ course }) => {
   return (
     <>
-      <h1 key={course.id}>{course.name} </h1>
+      <h2 key={course.id}>{course.name} </h2>
       <Content parts={course.parts} />
+      <Sum parts={course.parts} />
     </>
   )
 }
@@ -21,6 +22,17 @@ const Part = ({ part }) =>
   <p>
     {part.name} {part.exercises}
   </p>
+
+const Sum = ({ parts }) => {
+  var total = parts.reduce(function(sum, part) {return sum + part.exercises}, 0)
+  // console.log(total)
+  return(
+    <h3>
+      Total of {total} exercises
+    </h3>
+  )
+}
+
 
 const App = () => {
   const courses = [
@@ -45,13 +57,13 @@ const App = () => {
           },
           {
             id: 4,
-            name: 'LEARING HOW TO ADD INDEFINITE NUMBER OF PARTS',
+            name: 'Learning how to add indefinite number of parts',
             exercises: 26
           },
           {
             id: 5,
             name: 'And yet another one',
-            exercises: 2
+            exercises: 3
           }
         ]
       },
@@ -75,6 +87,7 @@ const App = () => {
 
   return (
     <div>
+      <h1>Web development curriculum </h1>
       <Courses courses={courses} />
     </div>
   )
