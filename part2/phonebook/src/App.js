@@ -6,7 +6,8 @@ const Showpersons = ({persons}) =>
   </>
 
 
-const App = () => {
+const App = () => 
+{
   const [persons, setPersons] = useState([
     { name: 'Arto Hellas' }
   ]) 
@@ -14,12 +15,20 @@ const App = () => {
 
   const addName = (event) => {  //This function is executed when the button is pressed (and the new name is submitted)
     event.preventDefault()      //To prevent usual onSubmit handling and take over control
-    const nameObject = {        //Create a new object with the name to be added
-      name: newName
-    }
     
-    setPersons(persons.concat(nameObject))      //Concatenate the object to a complete new persons array and offer it to the appropriate State function
-    setNewName('Enter yet another name...')     //reset the default value - for fun not empty
+    if (typeof persons.find(person => person.name === newName) !== 'undefined') // Test whether the person to add is already in the array
+      {
+        window.alert(`${newName} is already in the phonebook`)
+      }
+    else 
+      {
+        const nameObject = {        //Create a new object with the name to be added
+          name: newName
+        }
+        
+        setPersons(persons.concat(nameObject))      //Concatenate the object to a complete new persons array and offer it to the appropriate State function
+        setNewName('Enter yet another name...')     //reset the default value - for fun not empty
+      }
   }
 
   // Everytime a character changes in the input field this onChange function is called 
