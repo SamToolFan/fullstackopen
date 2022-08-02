@@ -1,11 +1,7 @@
 import { useState } from 'react'
 
-const Filter = (persons, filter) => persons.filter(person => person.name.toLowerCase().includes(filter.toLowerCase()))
-
-const Showpersons = (props) => 
-    <> 
-      {Filter(props.persons, props.filter).map(person => <p key={person.name}>{person.name} {person.number}</p>)}
-    </>
+import Findperson from './components/Findperson' 
+import Showpersons from './components/Showpersons' 
 
 const App = () => 
 {
@@ -23,8 +19,7 @@ const App = () =>
   const addName = (event) =>    //This function is executed when the button is pressed (and the new name is submitted)
   {
     event.preventDefault()      //To prevent usual onSubmit handling and take over control
-    
-    if (typeof persons.find(person => person.name === newName) !== 'undefined') // Test whether the person to add is already in the array
+    if (Findperson(persons, newName) !== 'undefined') // Test whether the person to add is already in the array
       {
         window.alert(`${newName} is already in the phonebook`)
       }
@@ -34,12 +29,11 @@ const App = () =>
           name: newName,
           number: newNumber
         }
-        
         setPersons(persons.concat(nameObject))      //Concatenate the object to a complete new persons array and offer it to the appropriate State function
   
         setNewName('')     //reset the default value
-        setNewNumber('')     //reset the default value
-        setFilter('')     //reset filter so an added name is always shown
+        setNewNumber('')   //reset the default value
+        setFilter('')      //reset filter so an added name is always shown
       }
   }
 
@@ -49,12 +43,10 @@ const App = () =>
     //console.log(event.target.value)
     setNewName(event.target.value)
   }
-
   const handleNumberAdd = (event) => {
     //console.log(event.target.value)
     setNewNumber(event.target.value)
   }
-
   const handleFilter = (event) => {
     //console.log(event.target.value)
     setFilter(event.target.value)
@@ -83,5 +75,6 @@ const App = () =>
     </div>
   )
 }
+
 
 export default App
