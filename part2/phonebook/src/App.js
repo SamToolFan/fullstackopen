@@ -1,20 +1,25 @@
-import { useState } from 'react'
-
+import { useState, useEffect } from 'react'
+import axios from 'axios'
 import Findperson from './components/Findperson' 
 import Showpersons from './components/Showpersons' 
 
 const App = () => 
 {
-  const [persons, setPersons] = useState([
-    { name: 'Arto Hellas', number: '040-1234567' },
-    { name: 'Sander van Waard', number: '45678298765' },
-    { name: 'Marije Koekebacker', number: '98765432' },
-    { name: 'Jan Jansen', number: '34567890' }
-   ])
-
+  const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('Enter a name to add...')
   const [newNumber, setNewNumber] = useState('Enter a telephonenumber...')
   const [filterName, setFilter] = useState('')
+
+  useEffect(() => {
+    console.log('effect')
+    axios
+      .get('http://localhost:3001/persons')
+      .then(response => {
+        console.log('promise fulfilled')
+        setPersons(response.data)
+      })
+  }, [])
+  console.log('render', persons.length, 'persons')
 
   const addName = (event) =>    //This function is executed when the button is pressed (and the new name is submitted)
   {
