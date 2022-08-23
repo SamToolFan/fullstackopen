@@ -16,29 +16,19 @@
       "id": 3
     },
     {
-      "name": "Mary Poppendieck",
-      "number": "39-23-6423122",
-      "id": 4
-    },
-    {
-      "name": "Sander",
-      "number": "06-33053091",
-      "id": 5
-    },
-    {
-      "name": "Pipo de Clown",
-      "number": "76543234567",
-      "id": 6
-    },
-    {
-      "name": "Jan Jansen",
-      "number": "98765432345678",
-      "id": 7
-    },
-    {
       "name": "Kees Kist",
       "number": "112",
       "id": 8
+    },
+    {
+      "name": "Marije van Vliet",
+      "number": "8765432",
+      "id": 10
+    },
+    {
+      "name": "Sander van Waard",
+      "number": "98765445678",
+      "id": 20
     }
   ]
 }
