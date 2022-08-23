@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
-import axios from 'axios'
+//import axios from 'axios'
+import personService from './services/persons'
 import Findperson from './components/Findperson' 
 import Showpersons from './components/Showpersons' 
 
@@ -11,35 +12,37 @@ const App = () =>
   const [filterName, setFilter] = useState('')
 
   useEffect(() => {
-    console.log('effect')
-    axios
-      .get('http://localhost:3001/persons')
-      .then(response => {
-        console.log('promise fulfilled')
-        setPersons(response.data)
-      })
+    console.log('effect persons')
+      personService
+          .getAll()
+          .then(initialPersons => {
+              setPersons(initialPersons)
+          })
   }, [])
   console.log('render', persons.length, 'persons')
 
   const addName = (event) =>    //This function is executed when the button is pressed (and the new name is submitted)
   {
     event.preventDefault()      //To prevent usual onSubmit handling and take over control
-    if (Findperson(persons, newName) !== 'undefined') // Test whether the person to add is already in the array
-      {
+      if (Findperson(persons, newName) !== 'undefined') { // Test whether the person to add is already in the array
         window.alert(`${newName} is already in the phonebook`)
       }
-    else 
-      {
+    else {
         const nameObject = {        //Create a new object with the name to be added
           name: newName,
           number: newNumber
         }
-        setPersons(persons.concat(nameObject))      //Concatenate the object to a complete new persons array and offer it to the appropriate State function
-  
-        setNewName('')     //reset the default value
-        setNewNumber('')   //reset the default value
-        setFilter('')      //reset filter so an added name is always shown
-      }
+
+        personService
+            .create(nameObject)
+            .then(response => {
+                console.log(response)
+                setPersons(persons.concat(nameObject))      //Concatenate the object to a complete new persons array and offer it to the appropriate State function
+                setNewName('')     //reset the default value
+                setNewNumber('')   //reset the default value
+                setFilter('')      //reset filter so an added name is always shown
+            })
+    }
   }
 
   // Handling the input - Everytime a character changes in the input field this onChange function is called (so everykeystroke I guess)
@@ -61,7 +64,7 @@ const App = () =>
     <div>
       <h2>Phonebook</h2>
         <div>
-          filter shown with: <input  value={filterName} onChange={handleFilter}/>
+          Search person: <input  value={filterName} onChange={handleFilter}/>
         </div>
       <h2>Add a new</h2>
       <form onSubmit={addName}>
