@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react'
-//import axios from 'axios'
 import personService from './services/persons'
 import Findperson from './components/Findperson' 
 import Showperson from './components/Showperson' 
@@ -24,35 +23,56 @@ const App = () =>
 
   const addName = (event) =>    //This function is executed when the button is pressed (and the new name is submitted)
   {
-    event.preventDefault()      //To prevent usual onSubmit handling and take over control
-      if (Findperson(persons, newName) !== 'undefined') { // Test whether the person to add is already in the array
-        window.alert(`${newName} is already in the phonebook`)
+      event.preventDefault()      //To prevent usual onSubmit handling and take over control
+
+      const Findresult = Findperson(persons, newName, newNumber) // Test whether the person + number or person to add is already in the array
+      //console.log(Findresult)
+      if (Findresult === 'update') {
+          //Findresult is true so Yes is pressed when Name is found with a new number => Update the number
+          //console.log('Update the person')
+          const person = persons.find(person => person.name === newName)
+          const updatedPerson = {...person, number: newNumber}
+          //console.log(updatedPerson)
+
+          personService
+              .update(updatedPerson.id, updatedPerson)
+              .then(returnedPerson => {
+                  setPersons(persons.map(person => person.id !== updatedPerson.id ? person : returnedPerson))
+              })
+
+          setFilter('')      //reset filter so an updated name is always shown
       }
-      else {
-        // Because I need the ID in order to be able to build the right delete button for a just added person 
-        // I will determine it myself instead of having axios/json call do that because just the axios/json call will not upate the persons state array of course
-        // By determining the ID myself I can update the persons array properly
-        const ids = persons.map(person => person.id) // determine all ids in persons
-        //console.log(ids)
-        const maxid = Math.max(...ids) // determine the highest id in persons
+      else if (Findresult !== 'exact match' && Findresult !== 'ignore') {
+          //console.log('Add the person')
+          // Name is new so just add the person
+          // Because I need the ID in order to be able to build the right delete button for a just added person 
+          // I will determine it myself instead of having axios/json call do that because just the axios/json call will not upate the persons state array of course
+          // By determining the ID myself I can update the persons array properly
+          const ids = persons.map(person => person.id) // determine all ids in persons
+          //console.log(ids)
+          const maxid = Math.max(...ids) // determine the highest id in persons
+          const newid = (ids.length === 0) ? 1 : maxid+1  // If the list is completely empty then math.max returns -infinity so then mayham!!! :D - just start with 1 then
 
-        const nameObject = {        //Create a new object with the name to be added
-          name: newName,
-          number: newNumber,
-          id: maxid+1
-        }
+          const nameObject = {        //Create a new object with the name to be added
+            name: newName,
+            number: newNumber,
+            id: newid
+            }
 
-        personService
+          personService
             .create(nameObject)
             .then(response => {
                 setPersons(persons.concat(nameObject))      //Concatenate the object to a complete new persons array and offer it to the appropriate State function
                 //console.log(response, persons)
-                setNewName('')     //reset the default value
-                setNewNumber('')   //reset the default value
                 setFilter('')      //reset filter so an added name is always shown
             })
-    }
-  }
+      }
+      setNewName('')     //reset the default value
+      setNewNumber('')   //reset the default value
+      // Findresult === 'exact match' so name and number combo are already there => do nothing
+      // OR
+      // Findresult === 'ignore' so No is pressed when Name is found with a new number => do nothing
+   }
 
   const deletePerson = (id, name) => {
       //console.log('delete ' + id)
@@ -94,10 +114,10 @@ const App = () =>
       <h2>Add a new</h2>
       <form onSubmit={addName}>
         <div>
-          name: <input value={newName} onChange={handleNameAdd} />
+          Name: <input value={newName} onChange={handleNameAdd} />
         </div>
         <div>
-          number: <input value={newNumber} onChange={handleNumberAdd}/>
+          Number: <input value={newNumber} onChange={handleNumberAdd}/>
         </div>
         <div>
           <button type="submit">add</button>

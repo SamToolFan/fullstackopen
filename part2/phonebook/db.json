@@ -1,34 +1,24 @@
 {
   "persons": [
     {
-      "name": "Arto Hellas",
-      "number": "040-123456",
+      "name": "Sander",
+      "number": "8",
       "id": 1
     },
     {
-      "name": "Ada Lovelace",
-      "number": "39-44-5323523",
+      "name": "Jan",
+      "number": "8765432",
       "id": 2
     },
     {
-      "name": "Dan Abramov",
-      "number": "12-43-234345",
+      "name": "Piet",
+      "number": "2",
       "id": 3
     },
     {
-      "name": "Kees Kist",
-      "number": "112",
-      "id": 8
-    },
-    {
-      "name": "Marije van Vliet",
+      "name": "Rednas",
       "number": "8765432",
-      "id": 10
-    },
-    {
-      "name": "Sander van Waard",
-      "number": "98765445678",
-      "id": 20
+      "id": 4
     }
   ]
 }
