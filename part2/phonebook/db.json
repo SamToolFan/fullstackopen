@@ -6,19 +6,29 @@
       "id": 1
     },
     {
-      "name": "Jan",
-      "number": "8",
-      "id": 2
-    },
-    {
-      "name": "Piet",
-      "number": "2",
-      "id": 3
-    },
-    {
       "name": "Rednas",
       "number": "8765432",
       "id": 4
+    },
+    {
+      "name": "Finn",
+      "number": "45678",
+      "id": 5
+    },
+    {
+      "name": "Jari Litmanen",
+      "number": "87654",
+      "id": 6
+    },
+    {
+      "name": "Sibelius",
+      "number": "3456789",
+      "id": 7
+    },
+    {
+      "name": "Linus Torvald",
+      "number": "8765432",
+      "id": 8
     }
   ]
 }

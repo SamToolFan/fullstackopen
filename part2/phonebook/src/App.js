@@ -40,14 +40,28 @@ const App = () =>
               .update(updatedPerson.id, updatedPerson)
               .then(returnedPerson => {
                   setPersons(persons.map(person => person.id !== updatedPerson.id ? person : returnedPerson))
+                  setTextMessage(
+                      [`Telephonenumber of '${newName}' is updated`, 'message']
+                  )
+                  setTimeout(() => {
+                      setTextMessage([null, null])
+                  }, 2000)
+              })
+              .catch(error => {
+                  //console.log('fail')
+                  setTextMessage(
+                      [`'${newName}' appears to have been removed earlier (or he/she magically disappeared)`, 'error']
+                  )
+                  setTimeout(() => {
+                      setTextMessage([null, null])
+                  }, 2000)
+                  personService
+                      .getAll()
+                      .then(initialPersons => {
+                          setPersons(initialPersons)
+                      })
               })
 
-          setTextMessage(
-              [`Telephonenumber of '${newName}' is updated`, 'message']
-          )
-          setTimeout(() => {
-              setTextMessage([null, null])
-          }, 2000)
 
           setFilter('')      //reset filter so an updated name is always shown
       }
@@ -140,9 +154,11 @@ const App = () =>
         <div>
           Name: <input value={newName} onChange={handleNameAdd} />
         </div>
+        <br />
         <div>
           Number: <input value={newNumber} onChange={handleNumberAdd}/>
         </div>
+        <br />
         <div>
           <button type="submit">add</button>
         </div>
