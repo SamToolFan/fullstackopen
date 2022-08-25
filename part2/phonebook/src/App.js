@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react'
 import personService from './services/persons'
 import Findperson from './components/Findperson' 
-import Showperson from './components/Showperson' 
+import Showperson from './components/Showperson'
+import Notification from './components/Notification'
 import Filter from './components/Filter' 
 
 const App = () => 
@@ -10,6 +11,7 @@ const App = () =>
   const [newName, setNewName] = useState('Enter a name to add...')
   const [newNumber, setNewNumber] = useState('Enter a telephonenumber...')
   const [filterName, setFilter] = useState('')
+  const [textMessage, setTextMessage] = useState([null, null])
 
   useEffect(() => {
     //console.log('effect persons')
@@ -40,6 +42,13 @@ const App = () =>
                   setPersons(persons.map(person => person.id !== updatedPerson.id ? person : returnedPerson))
               })
 
+          setTextMessage(
+              [`Telephonenumber of '${newName}' is updated`, 'message']
+          )
+          setTimeout(() => {
+              setTextMessage([null, null])
+          }, 2000)
+
           setFilter('')      //reset filter so an updated name is always shown
       }
       else if (Findresult !== 'exact match' && Findresult !== 'ignore') {
@@ -66,6 +75,13 @@ const App = () =>
                 //console.log(response, persons)
                 setFilter('')      //reset filter so an added name is always shown
             })
+
+          setTextMessage(
+              [`'${newName}' is added to the telephonebook`, 'message']
+          )
+          setTimeout(() => {
+              setTextMessage([null, null])
+          }, 5000)
       }
       setNewName('')     //reset the default value
       setNewNumber('')   //reset the default value
@@ -84,7 +100,14 @@ const App = () =>
                   //console.log(response)
                   setPersons(persons => persons.filter(person => person.id !== id))      //Delete the deleted person from the State
               })
-      }
+
+          setTextMessage(
+              [`'${name}' is deleted from the telephonebook`, 'delmessage']
+          )
+          setTimeout(() => {
+              setTextMessage([null, null])
+          }, 5000)
+     }
       else {
           window.alert(`Ok ${name} stays!`)
       }
@@ -108,6 +131,7 @@ const App = () =>
   return (
     <div>
       <h2>Phonebook</h2>
+          <Notification message={textMessage[0]} format={textMessage[1]} />
         <div>
           Search person: <input  value={filterName} onChange={handleFilter}/>
         </div>
