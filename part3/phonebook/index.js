@@ -25,10 +25,18 @@ let phonebook = [
     "number": "39-23-6423122"
   }
 ]
+
 app.get('/api/phonebook', (request, response) => {
   console.log(`GET All phonebook entries`)
   response.json(phonebook)
 })
+
+app.get('/info', (request, response) => {
+  console.log(`Get number of phonebook entries`)
+  const stringtoreturn = `Phonebook has info for `+ phonebook.length + ` people <BR/><BR/> ${Date()}`
+  response.send(stringtoreturn)
+})
+
 
 const PORT = 3001
 app.listen(PORT)
