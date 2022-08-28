@@ -27,14 +27,14 @@ let phonebook = [
 ]
 
 app.get('/api/persons', (request, response) => {
-  console.log(`GET All phonebook entries`)
+  //console.log(`GET All phonebook entries`)
   response.json(phonebook)
 })
 
 
 app.get('/api/persons/:id', (request, response) => {
   const id = Number(request.params.id)
-  console.log(id)
+  //console.log(id)
   const pbentry = phonebook.find(pbentry => {
     console.log(pbentry.id, typeof pbentry.id, id, typeof id, pbentry.id === id)
     return pbentry.id === id
@@ -55,8 +55,24 @@ app.delete('/api/persons/:id', (request, response) => {
   response.status(204).end()
 })
 
+app.post('/api/persons', (request, response) => {
+  const body = request.body
+
+  const pbentry = {
+    id: Math.floor(Math.random() * 1000000000),
+    name: body.name,
+    number: body.number,
+  }
+
+  phonebook = phonebook.concat(pbentry)
+
+  response.json(pbentry)
+  //console.log(pbentry)
+  //console.log(request.headers)
+})
+
 app.get('/info', (request, response) => {
-  console.log(`Get number of phonebook entries`)
+  //console.log(`Get number of phonebook entries`)
   const stringtoreturn = `Phonebook has info for `+ phonebook.length + ` people <BR/><BR/> ${Date()}`
   response.send(stringtoreturn)
 })
