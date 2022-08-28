@@ -48,6 +48,13 @@ app.get('/api/persons/:id', (request, response) => {
   }
 })
 
+app.delete('/api/persons/:id', (request, response) => {
+  const id = Number(request.params.id)
+  phonebook = phonebook.filter(pbentry => pbentry.id !== id)
+
+  response.status(204).end()
+})
+
 app.get('/info', (request, response) => {
   console.log(`Get number of phonebook entries`)
   const stringtoreturn = `Phonebook has info for `+ phonebook.length + ` people <BR/><BR/> ${Date()}`
