@@ -26,9 +26,26 @@ let phonebook = [
   }
 ]
 
-app.get('/api/phonebook', (request, response) => {
+app.get('/api/persons', (request, response) => {
   console.log(`GET All phonebook entries`)
   response.json(phonebook)
+})
+
+
+app.get('/api/persons/:id', (request, response) => {
+  const id = Number(request.params.id)
+  console.log(id)
+  const pbentry = phonebook.find(pbentry => {
+    console.log(pbentry.id, typeof pbentry.id, id, typeof id, pbentry.id === id)
+    return pbentry.id === id
+  })
+
+  console.log(pbentry)
+  if (pbentry) {
+    response.json(pbentry)
+  } else {
+    response.status(404).end()
+  }
 })
 
 app.get('/info', (request, response) => {
