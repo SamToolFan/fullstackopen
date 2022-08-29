@@ -1,11 +1,22 @@
 const express = require('express')
 const app = express()
 
+app.use(express.json())
+
 var morgan = require('morgan')
 
-app.use(morgan('tiny'))
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :jsonbody'))
 
-app.use(express.json())
+morgan.token('jsonbody', function getBody (request) {
+  //console.log(request.method)
+  if (request.method === 'POST') {
+    return JSON.stringify(request.body)
+  }
+  else {
+    //console.log("niet POST")
+    return ' '
+  }
+})
 
 let phonebook = [
   { 
@@ -40,7 +51,7 @@ app.get('/api/persons/:id', (request, response) => {
   const id = Number(request.params.id)
   //console.log(id)
   const pbentry = phonebook.find(pbentry => {
-    console.log(pbentry.id, typeof pbentry.id, id, typeof id, pbentry.id === id)
+    //console.log(pbentry.id, typeof pbentry.id, id, typeof id, pbentry.id === id)
     return pbentry.id === id
   })
 
@@ -69,7 +80,7 @@ app.post('/api/persons', (request, response) => {
   }
 
   const pbentry2 = phonebook.find(pbentry => {
-    console.log(pbentry.name) 
+    //console.log(pbentry.name) 
     return pbentry.name === body.name
   })
 
