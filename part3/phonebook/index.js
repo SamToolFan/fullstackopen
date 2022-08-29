@@ -57,16 +57,36 @@ app.delete('/api/persons/:id', (request, response) => {
 
 app.post('/api/persons', (request, response) => {
   const body = request.body
-
-  const pbentry = {
-    id: Math.floor(Math.random() * 1000000000),
-    name: body.name,
-    number: body.number,
+  
+  if (!body.name || !body.number) {
+    return response.status(400).json({ 
+      error: 'name or number is missing' 
+    })
   }
 
-  phonebook = phonebook.concat(pbentry)
+  const pbentry2 = phonebook.find(pbentry => {
+    console.log(pbentry.name) 
+    return pbentry.name === body.name
+  })
 
-  response.json(pbentry)
+  if(pbentry2 === undefined) {
+    //console.log('not found')
+
+    const pbentry = {
+      id: Math.floor(Math.random() * 1000000000),
+      name: body.name,
+      number: body.number,
+    }
+    phonebook = phonebook.concat(pbentry)
+    response.json(pbentry)
+  }
+  else {
+    //console.log(pbentry2)
+    return response.status(400).json({ 
+      error: 'name must be unique' 
+    })
+  }
+
   //console.log(pbentry)
   //console.log(request.headers)
 })
