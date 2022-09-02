@@ -1,11 +1,10 @@
 const express = require('express')
 const app = express()
 const cors = require('cors')
-
+var morgan = require('morgan')
 
 app.use(express.json())
-
-var morgan = require('morgan')
+app.use(cors())
 
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :jsonbody'))
 
@@ -20,7 +19,6 @@ morgan.token('jsonbody', function getBody (request) {
   }
 })
 
-app.use(cors())
 
 let phonebook = [
   { 
@@ -44,6 +42,10 @@ let phonebook = [
     "number": "39-23-6423122"
   }
 ]
+
+app.get('/', (req, res) => {
+  res.send('<h1>Goodmorning Vietnam!</h1>')
+})
 
 app.get('/api/persons', (request, response) => {
   //console.log(`GET All phonebook entries`)
@@ -116,7 +118,7 @@ app.get('/info', (request, response) => {
   response.send(stringtoreturn)
 })
 
-const PORT = 3001
-app.listen(PORT)
-console.log(`Server running on port ${PORT}`)
-
+const PORT = process.env.PORT || 3001
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`)
+})
