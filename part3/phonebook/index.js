@@ -1,8 +1,11 @@
-const express = require('express')
-const app = express()
-const cors = require('cors')
-var morgan = require('morgan')
+require('dotenv').config()  // For getting enviroment variables out of .env - only localhost - these settings are in Fly.io secrets because you do not want .env with passwords on the FLyo server
+const express = require('express') // Express is a node js web application framework that provides broad features for building web and mobile applications.
+const cors = require('cors') // Cross-origin resource sharing (CORS) allows AJAX requests to skip the Same-origin policy and access resources from remote hosts.
+const mongoose = require('mongoose') // Object Data Modeling (ODM) library for accessing Mongo databases in a more easy way then built in Mongo(in NodeJS, I think) functionality
+var morgan = require('morgan') // Library for showing information on contents of requests??? i'm not sure about my wording here :D
+const Person = require('./models/person') // Import my js code connecting for to Mongo and the Person schema model
 
+const app = express()
 app.use(express.json())
 app.use(express.static('build'))
 app.use(cors())
@@ -20,106 +23,49 @@ morgan.token('jsonbody', function getBody (request) {
   }
 })
 
-
-let phonebook = [
-  { 
-    "id": 1,
-    "name": "Arto Hellas", 
-    "number": "040-123456"
-  },
-  { 
-    "id": 2,
-    "name": "Ada Lovelace", 
-    "number": "39-44-5323523"
-  },
-  { 
-    "id": 3,
-    "name": "Dan Abramov", 
-    "number": "12-43-234345"
-  },
-  { 
-    "id": 4,
-    "name": "Mary Poppendieck", 
-    "number": "39-23-6423122"
-  }
-]
-
-app.get('/', (req, res) => {
-  res.send('<h1>Goodmorning Vietnam!</h1>')
-})
-
 app.get('/api/persons', (request, response) => {
-  //console.log(`GET All phonebook entries`)
-  response.json(phonebook)
+  Person.find({}).then(persons => {
+    console.log(persons.length)
+    response.json(persons)
+  })
 })
-
 
 app.get('/api/persons/:id', (request, response) => {
-  const id = Number(request.params.id)
-  //console.log(id)
-  const pbentry = phonebook.find(pbentry => {
-    //console.log(pbentry.id, typeof pbentry.id, id, typeof id, pbentry.id === id)
-    return pbentry.id === id
+  Person.findById(request.params.id).then(person => {
+    response.json(person)
   })
-
-  console.log(pbentry)
-  if (pbentry) {
-    response.json(pbentry)
-  } else {
-    response.status(404).end()
-  }
 })
 
 app.delete('/api/persons/:id', (request, response) => {
-  const id = Number(request.params.id)
-  phonebook = phonebook.filter(pbentry => pbentry.id !== id)
-
-  response.status(204).end()
+  Person.deleteOne({_id: request.params.id}).then(person => {
+    response.json(person)
+  })  
 })
 
 app.post('/api/persons', (request, response) => {
   const body = request.body
-  
-  if (!body.name || !body.number) {
-    return response.status(400).json({ 
-      error: 'name or number is missing' 
-    })
+
+  if (body.name === undefined || body.number === undefined) {
+    return response.status(400).json({ error: 'name and/or number is missing' })
   }
 
-  const pbentry2 = phonebook.find(pbentry => {
-    //console.log(pbentry.name) 
-    return pbentry.name === body.name
+  const person = new Person({
+    name: body.name,
+    number: body.number,
   })
 
-  if(pbentry2 === undefined) {
-    //console.log('not found')
-
-    const pbentry = {
-      id: Math.floor(Math.random() * 1000000000),
-      name: body.name,
-      number: body.number,
-    }
-    phonebook = phonebook.concat(pbentry)
-    response.json(pbentry)
-  }
-  else {
-    //console.log(pbentry2)
-    return response.status(400).json({ 
-      error: 'name must be unique' 
-    })
-  }
-
-  //console.log(pbentry)
-  //console.log(request.headers)
+  person.save().then(savedPerson => {
+    response.json(savedPerson)
+  })
 })
 
-app.get('/info', (request, response) => {
-  //console.log(`Get number of phonebook entries`)
-  const stringtoreturn = `Phonebook has info for `+ phonebook.length + ` people <BR/><BR/> ${Date()}`
-  response.send(stringtoreturn)
-})
+const unknownEndpoint = (request, response) => {
+  response.status(404).send({ error: 'unknown endpoint' })
+}
 
-const PORT = process.env.PORT || 3001
+app.use(unknownEndpoint)
+
+const PORT = process.env.PORT
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
 })

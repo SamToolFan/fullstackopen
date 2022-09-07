@@ -1,0 +1,39 @@
+GET https://myphonebook.fly.dev/api/persons/
+
+###
+GET https://myphonebook.fly.dev/api/persons/1
+
+###
+DELETE  https://myphonebook.fly.dev/api/persons/2
+
+###
+POST https://myphonebook.fly.dev/api/persons
+Content-Type: application/json
+
+{
+    "name": "Simon",
+    "number": "252624252"
+}
+
+
+###
+GET http://localhost:3001/api/persons/
+
+###
+GET http://localhost:3001/api/persons/631766a940f5022b8c9a08d1
+
+###
+DELETE  http://localhost:3001/api/persons/631837917817c351d5362e76
+
+###
+POST http://localhost:3001/api/persons
+Content-Type: application/json
+
+{
+    "name": "Sjonnie",
+    "number": "45"
+}
+
+
+###
+GET http://localhost:3001/api/persons/info
