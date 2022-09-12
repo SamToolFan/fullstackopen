@@ -48,6 +48,19 @@ app.get('/api/persons/:id', (request, response, next) => {
     .catch(error => next(error))
 })
 
+app.get('/info', (request, response, next) => {
+  Person.find({})
+    .then(persons => {
+    if (persons) {
+      //console.log(persons.length)
+      response.send(`Phonebook has info for `+ persons.length + ` people <BR/><BR/> ${Date()}`)
+    } else {
+      response.status(404).end()
+    }
+  })
+  .catch(error => next(error))
+})
+
 app.delete('/api/persons/:id', (request, response, next) => {
   Person.findByIdAndRemove(request.params.id)
     .then(result => {

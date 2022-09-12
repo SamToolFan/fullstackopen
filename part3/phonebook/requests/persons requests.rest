@@ -20,7 +20,10 @@ Content-Type: application/json
 GET http://localhost:3001/api/persons/
 
 ###
-GET http://localhost:3001/api/persons/6318379b7817c351d5362e7a
+GET http://localhost:3001/info/
+
+###
+GET http://localhost:3001/api/persons/631dbd3bef30a73df3910032
 
 ###
 DELETE  http://localhost:3001/api/persons/6318379b7817c351d5362e7a
@@ -39,7 +42,7 @@ GET http://localhost:3001/api/persons/info
 
 
 ###
-PUT http://localhost:3001/api/persons
+PUT http://localhost:3001/api/persons/631e11afa114d9148171a136
 Content-Type: application/json
 
 {
