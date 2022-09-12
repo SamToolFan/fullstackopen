@@ -20,10 +20,10 @@ Content-Type: application/json
 GET http://localhost:3001/api/persons/
 
 ###
-GET http://localhost:3001/api/persons/631766a940f5022b8c9a08d1
+GET http://localhost:3001/api/persons/6318379b7817c351d5362e7a
 
 ###
-DELETE  http://localhost:3001/api/persons/63188e1cd743fdd863d24869
+DELETE  http://localhost:3001/api/persons/6318379b7817c351d5362e7a
 
 ###
 POST http://localhost:3001/api/persons
@@ -32,6 +32,19 @@ Content-Type: application/json
 {
     "name": "Sjonnie",
     "number": "45"
+}
+
+###
+GET http://localhost:3001/api/persons/info
+
+
+###
+PUT http://localhost:3001/api/persons
+Content-Type: application/json
+
+{
+    "name": "Sjonnie",
+    "number": "12"
 }
 
 ###
