@@ -1,4 +1,4 @@
-import React from 'react'
+//import React from 'react'
 
 const Findperson = (persons, newName, newNumber) => {
     const found = typeof persons.find(person => (person.name === newName && person.number === newNumber))

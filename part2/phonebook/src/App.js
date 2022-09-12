@@ -66,25 +66,23 @@ const App = () =>
           setFilter('')      //reset filter so an updated name is always shown
       }
       else if (Findresult !== 'exact match' && Findresult !== 'ignore') {
-          //console.log('Add the person')
-          // Name is new so just add the person
-          // Because I need the ID in order to be able to build the right delete button for a just added person 
-          // I will determine it myself instead of having axios/json call do that because just the axios/json call will not upate the persons state array of course
-          // By determining the ID myself I can update the persons array properly
-          const ids = persons.map(person => person.id) // determine all ids in persons
-          //console.log(ids)
-          const maxid = Math.max(...ids) // determine the highest id in persons
-          const newid = (ids.length === 0) ? 1 : maxid+1  // If the list is completely empty then math.max returns -infinity so then mayham!!! :D - just start with 1 then
+          console.log('Add the person')
+//          const ids = persons.map(person => person.id) // determine all ids in persons
+//          console.log(ids)
 
           const nameObject = {        //Create a new object with the name to be added
             name: newName,
-            number: newNumber,
-            id: newid
+            number: newNumber
+            //number: newNumber,
+            //id: newid
             }
 
           personService
             .create(nameObject)
             .then(response => {
+                //console.log('The response = '+JSON.stringify(response))
+                nameObject.id = response.id
+                //console.log('The created nameObject = '+JSON.stringify(nameObject))
                 setPersons(persons.concat(nameObject))      //Concatenate the object to a complete new persons array and offer it to the appropriate State function
                 //console.log(response, persons)
                 setFilter('')      //reset filter so an added name is always shown
@@ -97,11 +95,14 @@ const App = () =>
               setTextMessage([null, null])
           }, 5000)
       }
+      else{
+        // Findresult === 'exact match' so name and number combo are already there => do nothing
+        // OR
+        // Findresult === 'ignore' so No is pressed when Name is found with a new number => do nothing
+        //console.log('Either you chose to Ignore the update for an existing person OR there was an Exact match')
+      }
       setNewName('')     //reset the default value
       setNewNumber('')   //reset the default value
-      // Findresult === 'exact match' so name and number combo are already there => do nothing
-      // OR
-      // Findresult === 'ignore' so No is pressed when Name is found with a new number => do nothing
    }
 
   const deletePerson = (id, name) => {
