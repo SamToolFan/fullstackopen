@@ -23,7 +23,7 @@ GET http://localhost:3001/api/persons/
 GET http://localhost:3001/api/persons/631766a940f5022b8c9a08d1
 
 ###
-DELETE  http://localhost:3001/api/persons/631837917817c351d5362e76
+DELETE  http://localhost:3001/api/persons/63188e1cd743fdd863d24869
 
 ###
 POST http://localhost:3001/api/persons
@@ -33,7 +33,6 @@ Content-Type: application/json
     "name": "Sjonnie",
     "number": "45"
 }
-
 
 ###
 GET http://localhost:3001/api/persons/info
