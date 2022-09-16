@@ -49,9 +49,17 @@ const App = () =>
               })
               .catch(error => {
                   //console.log('fail')
-                  setTextMessage(
-                      [`'${newName}' appears to have been removed earlier (or he/she magically disappeared)`, 'error']
-                  )
+                  //console.log(error.response.data.error)
+                  //console.log(error)
+                  if (error.response.status === 400) {
+                      setTextMessage(
+                        [`'${error.response.data.error}'`, 'error']
+                      )
+                  } else {
+                      setTextMessage(
+                        [`'${newName}' appears to have been removed earlier (or he/she magically disappeared)`, 'error']
+                      )
+                  }
                   setTimeout(() => {
                       setTextMessage([null, null])
                   }, 2000)
@@ -66,7 +74,7 @@ const App = () =>
           setFilter('')      //reset filter so an updated name is always shown
       }
       else if (Findresult !== 'exact match' && Findresult !== 'ignore') {
-          console.log('Add the person')
+//          console.log('Add the person')
 //          const ids = persons.map(person => person.id) // determine all ids in persons
 //          console.log(ids)
 
@@ -85,15 +93,24 @@ const App = () =>
                 //console.log('The created nameObject = '+JSON.stringify(nameObject))
                 setPersons(persons.concat(nameObject))      //Concatenate the object to a complete new persons array and offer it to the appropriate State function
                 //console.log(response, persons)
-                setFilter('')      //reset filter so an added name is always shown
+                setTextMessage(
+                  [`'${newName}' is added to the telephonebook`, 'message']
+                )
+                setTimeout(() => {
+                    setTextMessage([null, null])
+                }, 5000)
+                 setFilter('')      //reset filter so an added name is always shown
             })
-
-          setTextMessage(
-              [`'${newName}' is added to the telephonebook`, 'message']
+          .catch(error => {
+            // this is the way to access the error message
+            //console.log(error.response.data.error)
+            setTextMessage(
+              [error.response.data.error, 'error']
           )
           setTimeout(() => {
               setTextMessage([null, null])
-          }, 5000)
+          }, 10000)
+  })
       }
       else{
         // Findresult === 'exact match' so name and number combo are already there => do nothing
