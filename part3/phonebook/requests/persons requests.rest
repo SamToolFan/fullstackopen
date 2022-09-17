@@ -23,32 +23,28 @@ GET http://localhost:3001/api/persons/
 GET http://localhost:3001/info/
 
 ###
-GET http://localhost:3001/api/persons/631dbd3bef30a73df3910032
+GET http://localhost:3001/api/persons/6321f07246f295de78d06a3e
 
 ###
-DELETE  http://localhost:3001/api/persons/6318379b7817c351d5362e7a
+GET http://localhost:3001/api/persons/name/Jan
+
+###
+DELETE  http://localhost:3001/api/persons/6324826f454453c9bb9ae478
 
 ###
 POST http://localhost:3001/api/persons
 Content-Type: application/json
 
 {
-    "name": "Ge",
-    "number": "45"
+    "name": "Jannetje",
+    "number": "45-36723237623"
 }
 
 ###
-GET http://localhost:3001/api/persons/info
-
-
-###
-PUT http://localhost:3001/api/persons/631e11afa114d9148171a136
+PUT http://localhost:3000/api/persons/6324762918364194c46b19c0
 Content-Type: application/json
 
 {
-    "name": "Sjonnie",
-    "number": "12"
+    "name": "Dirk",
+    "number": "123-38238932982398"
 }
-
-###
-GET http://localhost:3001/api/persons/info

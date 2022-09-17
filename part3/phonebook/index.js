@@ -1,7 +1,7 @@
 require('dotenv').config()  // For getting enviroment variables out of .env - only localhost - these settings are in Fly.io secrets because you do not want .env with passwords on the FLyo server
 const express = require('express') // Express is a node js web application framework that provides broad features for building web and mobile applications.
 const cors = require('cors') // Cross-origin resource sharing (CORS) allows AJAX requests to skip the Same-origin policy and access resources from remote hosts.
-const mongoose = require('mongoose') // Object Data Modeling (ODM) library for accessing Mongo databases in a more easy way then built in Mongo(in NodeJS, I think) functionality
+//const mongoose = require('mongoose') // Object Data Modeling (ODM) library for accessing Mongo databases in a more easy way then built in Mongo(in NodeJS, I think) functionality
 var morgan = require('morgan') // Library for showing information on contents of requests??? i'm not sure about my wording here :D
 const Person = require('./models/person') // Import my js code connecting for to Mongo and the Person schema model
 
@@ -26,14 +26,14 @@ morgan.token('jsonbody', function getBody (request) {
 app.get('/api/persons', (request, response, next) => {
   Person.find({})
     .then(persons => {
-    if (persons) {
+      if (persons) {
       //console.log(persons.length)
-      response.json(persons)
-    } else {
-      response.status(404).end()
-    }
-  })
-  .catch(error => next(error))
+        response.json(persons)
+      } else {
+        response.status(404).end()
+      }
+    })
+    .catch(error => next(error))
 })
 
 app.get('/api/persons/:id', (request, response, next) => {
@@ -49,7 +49,7 @@ app.get('/api/persons/:id', (request, response, next) => {
 })
 
 app.get('/api/persons/name/:name', (request, response, next) => {
-  Person.findOne({name: request.params.name})
+  Person.findOne({ name: request.params.name })
     .then(person => {
       if (person) {
         response.json(person)
@@ -63,19 +63,19 @@ app.get('/api/persons/name/:name', (request, response, next) => {
 app.get('/info', (request, response, next) => {
   Person.find({})
     .then(persons => {
-    if (persons) {
+      if (persons) {
       //console.log(persons.length)
-      response.send(`Phonebook has info for `+ persons.length + ` people <BR/><BR/> ${Date()}`)
-    } else {
-      response.status(404).end()
-    }
-  })
-  .catch(error => next(error))
+        response.send('Phonebook has info for '+ persons.length + ` people <BR/><BR/> ${Date()}`)
+      } else {
+        response.status(404).end()
+      }
+    })
+    .catch(error => next(error))
 })
 
 app.delete('/api/persons/:id', (request, response, next) => {
   Person.findByIdAndRemove(request.params.id)
-    .then(result => {
+    .then(result => { // eslint-disable-line no-unused-vars
       response.status(204).end()
     })
     .catch(error => next(error))
@@ -87,23 +87,23 @@ app.post('/api/persons', (request, response, next) => {
   // if (body.name === undefined || body.number === undefined) {
   //   return response.status(400).json({ error: 'name and/or number is missing' })
   // }
-  
+
   const person = new Person({
     name: body.name,
     number: body.number
   })
 
-  Person.findOne({name: body.name})
+  Person.findOne({ name: body.name })
     .then(findperson => {
       if (findperson) {
         response.status(409).send({ error: 'Person is already in the Phonebook' })
       } else {
         person.save()
-        .then(savedPerson => {
+          .then(savedPerson => {
           //console.log('savedPerson = '+savedPerson)
-          response.json(savedPerson)
-        })
-        .catch(error => next(error))
+            response.json(savedPerson)
+          })
+          .catch(error => next(error))
       }
     })
 })
@@ -112,8 +112,8 @@ app.put('/api/persons/:id', (request, response, next) => {
   const { name, number } = request.body
 
   Person.findByIdAndUpdate(
-    request.params.id, 
-    { name, number }, 
+    request.params.id,
+    { name, number },
     { new: true, runValidators: true, context: 'query' })
     .then(updatedPerson => {
       response.json(updatedPerson)
@@ -134,7 +134,7 @@ const errorHandler = (error, request, response, next) => {
     return response.status(400).send({ error: 'malformatted id' })
   } else if (error.name === 'ValidationError') {
     return response.status(400).json({ error: error.message })
-  } 
+  }
 
   next(error)
 }

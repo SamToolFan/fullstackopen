@@ -5,7 +5,7 @@ const url = process.env.MONGODB_URI
 console.log('connecting to', url)
 
 mongoose.connect(url)
-  .then(result => {
+  .then(result => { // eslint-disable-line no-unused-vars
     console.log('connected to MongoDB - persons collection')
   })
   .catch((error) => {
@@ -16,27 +16,27 @@ const personSchema = new mongoose.Schema({
   name: {
     type: String,
     minLength: 3,
-    required: [true, "Name required"]
+    required: [true, 'Name required']
   },
   number: {
     type: String,
     minLength: 8,
-    required: [true, "Number required"],
+    required: [true, 'Number required'],
     validate: {
       validator: function(v) {
-        return /^\d{2,3}-\d*$/.test(v);
+        return /^\d{2,3}-\d*$/.test(v)
       },
       message: props => `${props.value} is not a valid phone number!`
     },
   }
 })
-  
-personSchema.set('toJSON', {   // Rewrite the json returnedObject so the object _id is turned into a id string and two objects _id and _v are removed - apparently not interesting
-    transform: (document, returnedObject) => {
-      returnedObject.id = returnedObject._id.toString()
-      delete returnedObject._id
-      delete returnedObject.__v
-    }
-  })
 
-  module.exports = mongoose.model('Person', personSchema)
+personSchema.set('toJSON', {   // Rewrite the json returnedObject so the object _id is turned into a id string and two objects _id and _v are removed - apparently not interesting
+  transform: (document, returnedObject) => {
+    returnedObject.id = returnedObject._id.toString()
+    delete returnedObject._id
+    delete returnedObject.__v
+  }
+})
+
+module.exports = mongoose.model('Person', personSchema)
